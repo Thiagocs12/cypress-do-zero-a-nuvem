@@ -24,7 +24,11 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-Cypress.Commands.add('fillForm', user => {
+Cypress.Commands.add('fillForm', (user = {//valor padrão para a variavel
+    firstName: 'Lucas',
+    lastName: 'Eduardo da Costa',
+    email: 'lucas@gmail.com'
+}) => {
     const longText = Cypress._.repeat('Thiago da Costa Santos', 1)
     cy.get('#firstName').should('be.visible').type(user.firstName)
     cy.get('#lastName').should('be.visible').type(user.lastName)

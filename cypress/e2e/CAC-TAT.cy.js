@@ -11,7 +11,7 @@ describe('Central de Atendimento ao Cliente TAT', () => {
   })
   it('verifica o título da aplicação', () => {
     cy.title().should('eq', 'Central de Atendimento ao Cliente TAT')
-  }),
+  })
   it('preenche os campos obrigatórios e envia o formulário', () => {
     const longText = Cypress._.repeat('Thiago da Costa Santos ', 10)
     cy.get('#firstName').should('be.visible').type('Thiago')
@@ -21,30 +21,30 @@ describe('Central de Atendimento ao Cliente TAT', () => {
     cy.contains('button','Enviar').should('be.visible').click()
 
     cy.get('.success').should('be.visible')
-  }),
+  })
   it('exibe mensagem de erro ao submeter o formulário com um email com formatação inválida', () => {
     form.fillForm(user)
     cy.contains('button','Enviar').should('be.visible').click()
 
     cy.get('.error').should('be.visible')
-  }),
+  })
   it('impossível preencher campo telefone com caractere não numérico', () => {
     cy.get('#phone').should('be.visible').type('Thiago')
 
     cy.get('#phone').should('have.value', '')
-  }),
+  })
   it('exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário', () => {
     cy.get('#phone-checkbox').click()
-    cy.fillForm(user)
+    cy.fillForm()
     cy.contains('button','Enviar').should('be.visible').click()
 
     cy.get('.error').should('be.visible')
-  }),
+  })
   it('exibe mensagem de erro ao submeter o formulário sem preencher os campos obrigatórios', () => {
     cy.contains('button','Enviar').should('be.visible').click()
 
     cy.get('.error').should('be.visible')
-  }),
+  })
 
   it('preenche e limpa os campos nome, sobrenome, email e telefone', () => {
     cy.fillForm(user)
@@ -57,5 +57,39 @@ describe('Central de Atendimento ao Cliente TAT', () => {
     cy.get('#lastName').clear().should('have.value', '')
     cy.get('#email').clear().should('have.value', '')
     cy.get('#open-text-area').clear().should('have.value', '')
+  })
+
+  it('seleciona um produto (YouTube) por seu texto', () => {
+    cy.get('#product')
+      .select('YouTube')
+      .should('have.value', 'youtube')
+  })
+  it('seleciona um produto (mentoria) por seu value', () => {
+    cy.get('#product')
+      .select('mentoria')
+      .should('have.value', 'mentoria')
+  })
+  it('seleciona um produto (blog) por seu indice', () => {
+    cy.get('#product')
+      .select(1)
+      .should('have.value', 'blog')
+  })
+
+  it('marca o tipo de atendimento "Feedback"', () => {
+    cy.get('input[type="radio"').check('elogio').should('be.checked')
+  })
+
+  it('marca cada tipo de atendimento', () => {
+    cy.get('input[type="radio"')
+      .each(typeOfService => {
+        cy.wrap(typeOfService)
+          .check()
+          .should('be.checked')
+      })
+  })
+
+  it.only('A', () => {
+    cy.get('#email-checkbox')
+    cy.get('#phone-checkbox')
   })
 })
