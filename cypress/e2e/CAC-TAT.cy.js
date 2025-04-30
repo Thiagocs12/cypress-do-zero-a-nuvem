@@ -88,8 +88,59 @@ describe('Central de Atendimento ao Cliente TAT', () => {
       })
   })
 
-  it.only('A', () => {
-    cy.get('#email-checkbox')
-    cy.get('#phone-checkbox')
+  it('marca ambos checkboxes, depois desmarca o último', () => {
+    cy.get('input[type="checkbox"]').check()
+    cy.get('input[type="checkbox"]').last()
+      .should('be.checked')
+    cy.get('input[type="checkbox"]')
+      .last()
+      .uncheck()
+      .should('not.be.checked')
+  })
+
+  it('exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário', () => {
+    cy.fillForm(user)
+    cy.get('#phone-checkbox').check()
+    .should('be.checked')
+
+    cy.contains('button','Enviar').should('be.visible').click()
+
+    cy.get('.error').should('be.visible')
+  })
+
+  it('seleciona um arquivo da pasta fixtures', () => {
+    cy.fillForm(user)
+    cy.get('#file-upload').selectFile('cypress/fixtures/example.json')
+      .should(input => {
+        expect(input[0].files[0].name).to.eql('example.json')
+      })
+  })
+
+  it('seleciona um arquivo da pasta fixtures', () => {
+    cy.fillForm(user)
+    cy.get('#file-upload').selectFile('cypress/fixtures/example.json', {action: 'drag-drop'})
+      .should(input => {
+        expect(input[0].files[0].name).to.eql('example.json')
+      })
+  })
+  
+  it('seleciona um arquivo utilizando uma fixture para a qual foi dada um alias', () => {
+    cy.fillForm(user)
+    cy.fixture('example.json').as('exemplo')
+    cy.get('#file-upload').selectFile('@exemplo')
+      .should(input => {
+        expect(input[0].files[0].name).to.eql('example.json')
+      })
+  })
+
+  it('verifica que a política de privacidade abre em outra aba sem a necessidade de um clique', () => {
+    cy.contains('a','Política de Privacidade').should('be.visible').and('have.attr', 'target', '_blank')
+  })
+
+  it('acessa a página da política de privacidade removendo o target e então clicando no link', () => {
+    cy.contains('a','Política de Privacidade')
+      .invoke('removeAttr', 'target')
+      .click()
+    cy.title().should('eq', 'Central de Atendimento ao Cliente TAT - Política de Privacidade')
   })
 })
