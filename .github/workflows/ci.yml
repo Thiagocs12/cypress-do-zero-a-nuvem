@@ -12,4 +12,4 @@ jobs:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
         with:
           command: npm run test:cloud
-//npx cypress run --record --key a8a1800c-7a63-481f-96dc-afa30ed20519
+#npx cypress run --record --key a8a1800c-7a63-481f-96dc-afa30ed20519
