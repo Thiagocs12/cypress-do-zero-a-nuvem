@@ -12,15 +12,11 @@ describe('Central de Atendimento ao Cliente TAT', () => {
   it('verifica o título da aplicação', () => {
     cy.title().should('eq', 'Central de Atendimento ao Cliente TAT')
   })
-  it('preenche os campos obrigatórios e envia o formulário', () => {
-    const longText = Cypress._.repeat('Thiago da Costa Santos ', 10)
-    cy.get('#firstName').should('be.visible').type('Thiago')
-    cy.get('#lastName').should('be.visible').type('Santos')
-    cy.get('#email').should('be.visible').type('thiago.santoscos@gmail.com')
-    cy.get('#open-text-area').should('be.visible').type(longText, {delay: 0})
-    cy.contains('button','Enviar').should('be.visible').click()
-
-    cy.get('.success').should('be.visible')
+  it.only('preenche os campos obrigatórios e envia o formulário', () => {
+    cy.watchLock()
+    cy.fillForm(user)
+    cy.toSend()
+    cy.confirm()
   })
   it('exibe mensagem de erro ao submeter o formulário com um email com formatação inválida', () => {
     form.fillForm(user)

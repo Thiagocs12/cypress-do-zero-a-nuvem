@@ -35,3 +35,17 @@ Cypress.Commands.add('fillForm', (user = {//valor padrão para a variavel
     cy.get('#email').should('be.visible').type(user.email)
     cy.get('#open-text-area').should('be.visible').type(longText, {delay: 0})
 })
+
+Cypress.Commands.add('watchLock', () => {
+    cy.clock()
+})
+
+Cypress.Commands.add('toSend', () => {
+    cy.contains('button','Enviar').should('be.visible').click()
+})
+
+Cypress.Commands.add('confirm', (user) => {
+    cy.get('.success').should('be.visible')
+    cy.tick(3000)
+    cy.get('.success').should('not.be.visible')
+})
